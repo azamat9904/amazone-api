@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from 'express'
+import { connectToDB } from './core/db'
+import userRoutes from './routes/user'
 import morgan from 'morgan'
-import bodyParser from 'body-parser'
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -12,6 +13,7 @@ const port = process.env.PORT
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use('/auth', userRoutes)
 
 // api
 app.get('/', (req: Request, res: Response) => {
@@ -19,6 +21,10 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 //server
-app.listen(port, () => {
-    console.log(`⚡️[server]: Server is running at https://localhost:${port}`)
+connectToDB().then(() => {
+    app.listen(port, () => {
+        console.log(
+            `⚡️[server]: Server is running at https://localhost:${port}`
+        )
+    })
 })
