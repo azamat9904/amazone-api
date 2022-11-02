@@ -1,10 +1,11 @@
-import express, { Express, Request, Response } from 'express'
+import express, { Express } from 'express'
 import { connectToDB } from './core/db'
-import userRoutes from './routes/user'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
-
 dotenv.config()
+
+import productRoutes from './routes/product'
+import userRoutes from './routes/user'
 
 const app: Express = express()
 const port = process.env.PORT
@@ -13,12 +14,10 @@ const port = process.env.PORT
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use('/auth', userRoutes)
 
-// api
-app.get('/', (req: Request, res: Response) => {
-    res.send('Express + TypeScript Server')
-})
+// routes
+app.use('/auth', userRoutes)
+app.use('/products', productRoutes)
 
 //server
 connectToDB().then(() => {

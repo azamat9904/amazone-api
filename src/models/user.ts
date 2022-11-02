@@ -4,17 +4,14 @@ export interface IUser {
     name: string
     email: string
     password: string
+    address?: Types.ObjectId
 }
 
-interface IUserSchema extends IUser {
-    address: Types.ObjectId
-}
-
-const userSchema = new Schema<IUserSchema>({
+const userSchema = new Schema<IUser>({
     name: { type: String, required: true },
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
     address: { type: Schema.Types.ObjectId, ref: 'Address' },
 })
 
-export default model<IUserSchema>('User', userSchema)
+export default model<IUser>('User', userSchema)
